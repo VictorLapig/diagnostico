@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Diagnóstico do Crescimento Cristão</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --amber: #f0a500;
+    --blue: #4a9eda;
+    --green: #56c47e;
+    --rose: #e0687a;
+    --purple: #9b72d0;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --border: rgba(201,168,76,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── decorative bg ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 10%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 10% 80%, rgba(74,158,218,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 60px; }
+
+  /* ── screens ── */
+  .screen { display: none; animation: fadeUp .45s ease both; }
+  .screen.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ══ COVER ══ */
+  #cover {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    text-align: center;
+  }
+  #cover.active { display: flex; }
+
+  .cross-icon {
+    width: 64px; height: 64px;
+    margin-bottom: 28px;
+    filter: drop-shadow(0 0 18px rgba(201,168,76,0.5));
+  }
+
+  .cover-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 8vw, 38px);
+    line-height: 1.2;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 60%, #b8860b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover-desc {
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 320px;
+    margin: 0 auto 36px;
+  }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--amber) 100%);
+    color: #0d1117;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .5px;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 44px;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(201,168,76,0.35);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-start:active { transform: scale(.97); box-shadow: 0 4px 14px rgba(201,168,76,0.25); }
+
+  .pillars-row {
+    display: flex; gap: 10px;
+    margin-top: 44px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pillar-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 12px;
+    display: flex; align-items: center; gap: 6px;
+    color: var(--muted);
+  }
+  .pillar-badge span { font-size: 15px; }
+
+  /* ══ QUIZ HEADER ══ */
+  .quiz-header {
+    padding: 28px 24px 0;
+  }
+  .area-label {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .area-icon { font-size: 22px; }
+  .area-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+  }
+  .area-subtitle {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    margin-left: 32px;
+  }
+
+  /* progress bar */
+  .progress-wrap {
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 4px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--amber));
+    transition: width .4s ease;
+  }
+
+  /* ══ QUESTION CARD ══ */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin: 0 16px;
+    padding: 26px 22px 22px;
+  }
+
+  .q-number {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .q-text {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+
+  /* options */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .opt {
+    background: var(--surface2);
+    border: 1.5px solid transparent;
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+    transition: all .2s;
+    text-align: left;
+  }
+  .opt:active { transform: scale(.98); }
+  .opt.selected {
+    border-color: var(--gold);
+    color: var(--text);
+    background: rgba(201,168,76,0.08);
+  }
+  .opt-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--muted);
+    flex-shrink: 0;
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .opt.selected .opt-dot {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* nav buttons */
+  .nav-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 20px 0;
+    gap: 10px;
+  }
+  .btn-nav {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border-radius: 50px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-nav:hover { background: var(--surface2); }
+  .btn-nav.primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--amber) 100%);
+    border-color: transparent;
+    color: #0d1117;
+    font-weight: 600;
+    flex: 1;
+  }
+  .btn-nav:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* area progress dots */
+  .area-dots {
+    display: flex; justify-content: center; gap: 8px;
+    padding: 18px 0 0;
+  }
+  .area-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--surface2);
+    border: 1.5px solid var(--muted);
+    transition: all .3s;
+  }
+  .area-dot.done { background: var(--gold); border-color: var(--gold); }
+  .area-dot.active { background: transparent; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.2); }
+
+  /* ══ RESULT ══ */
+  #result { padding: 28px 20px 60px; display: none; flex-direction: column; align-items: center; }
+  #result.active { display: flex; }
+
+  .result-eyebrow {
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 10px; text-align: center;
+  }
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; text-align: center;
+    line-height: 1.3; margin-bottom: 6px;
+  }
+  .result-subtitle { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 28px; }
+
+  .radar-wrap {
+    width: 100%; max-width: 340px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  /* score cards */
+  .score-grid {
+    width: 100%; display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-bottom: 28px;
+  }
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px 16px;
+  }
+  .sc-icon { font-size: 20px; margin-bottom: 8px; }
+  .sc-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .sc-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; line-height: 1;
+    margin-bottom: 6px;
+  }
+  .sc-bar-bg { background: var(--surface2); border-radius: 3px; height: 5px; }
+  .sc-bar { height: 5px; border-radius: 3px; transition: width .8s ease .3s; }
+
+  /* verses section */
+  .verses-section { width: 100%; }
+  .verses-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .verse-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 20px 18px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .verse-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: rgba(201,168,76,0.08);
+    position: absolute;
+    top: -10px; left: 10px;
+    line-height: 1;
+  }
+  .verse-area-tag {
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .verse-text {
+    font-style: italic; font-size: 14px;
+    line-height: 1.7; color: var(--text);
+    margin-bottom: 8px;
+  }
+  .verse-ref { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+  /* message card */
+  .msg-card {
+    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04));
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 28px;
+    width: 100%;
+  }
+  .msg-card p { font-size: 14px; line-height: 1.7; color: var(--text); }
+  .msg-card strong { color: var(--gold-light); }
+
+  .btn-restart {
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border-radius: 50px;
+    padding: 13px 36px;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 12px;
+  }
+  .btn-restart:hover { background: rgba(201,168,76,0.1); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ COVER ══ -->
+  <div id="cover" class="screen active">
+    <svg class="cross-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="27" y="4" width="10" height="56" rx="5" fill="url(#cg)"/>
+      <rect x="4" y="20" width="56" height="10" rx="5" fill="url(#cg)"/>
+      <defs>
+        <linearGradient id="cg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#e8c97a"/><stop offset="1" stop-color="#c9a84c"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <p class="cover-eyebrow">John Stott · 4 Pilares</p>
+    <h1 class="cover-title">Diagnóstico do Crescimento Cristão</h1>
+    <p class="cover-desc">Responda 16 perguntas práticas e descubra como está o seu crescimento nas quatro áreas essenciais da vida cristã.</p>
+    <button class="btn-start" onclick="startQuiz()">Começar →</button>
+    <div class="pillars-row">
+      <div class="pillar-badge"><span>📖</span> Conhecimento</div>
+      <div class="pillar-badge"><span>🙏</span> Fé</div>
+      <div class="pillar-badge"><span>❤️</span> Amor</div>
+      <div class="pillar-badge"><span>✨</span> Santidade</div>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div id="quiz" class="screen">
+    <div class="quiz-header">
+      <div class="area-label">
+        <span class="area-icon" id="areaIcon"></span>
+        <span class="area-name" id="areaName"></span>
+      </div>
+      <p class="area-subtitle" id="areaSubtitle"></p>
+      <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    </div>
+
+    <div class="q-card">
+      <p class="q-number" id="qNumber"></p>
+      <p class="q-text" id="qText"></p>
+      <div class="options" id="optionsWrap"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" id="btnBack" onclick="goBack()">← Voltar</button>
+      <button class="btn-nav primary" id="btnNext" onclick="goNext()" disabled>Próxima →</button>
+    </div>
+
+    <div class="area-dots" id="areaDots">
+      <div class="area-dot active" data-i="0"></div>
+      <div class="area-dot" data-i="1"></div>
+      <div class="area-dot" data-i="2"></div>
+      <div class="area-dot" data-i="3"></div>
+    </div>
+  </div>
+
+  <!-- ══ RESULT ══ -->
+  <div id="result" class="screen">
+    <p class="result-eyebrow">Seu Diagnóstico</p>
+    <h2 class="result-title" id="resultTitle"></h2>
+    <p class="result-subtitle">Baseado nas suas respostas</p>
+
+    <div class="radar-wrap">
+      <canvas id="radarChart"></canvas>
+    </div>
+
+    <div class="score-grid" id="scoreGrid"></div>
+
+    <div class="msg-card" id="msgCard"></div>
+
+    <div class="verses-section">
+      <h3 class="verses-title">📜 Palavras para o seu Caminho</h3>
+      <div id="versesWrap"></div>
+    </div>
+
+    <button class="btn-restart" onclick="restart()">↺ Refazer o Diagnóstico</button>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════
+const areas = [
+  {
+    id: 'conhecimento',
+    name: 'Conhecimento',
+    subtitle: 'A Mente Cristã',
+    icon: '📖',
+    color: '#4a9eda',
+  },
+  {
+    id: 'fe',
+    name: 'Fé',
+    subtitle: 'A Confiança Prática',
+    icon: '🙏',
+    color: '#9b72d0',
+  },
+  {
+    id: 'amor',
+    name: 'Amor',
+    subtitle: 'A Evidência do Caráter',
+    icon: '❤️',
+    color: '#e0687a',
+  },
+  {
+    id: 'santidade',
+    name: 'Santidade',
+    subtitle: 'A Semelhança com Cristo',
+    icon: '✨',
+    color: '#56c47e',
+  },
+];
+
+const questions = [
+  // Conhecimento (0–3)
+  {
+    area: 0,
+    text: 'Nos últimos 7 dias, você leu a Bíblia por conta própria (fora da reunião)?',
+    opts: ['Não li nenhum dia','Li 1 ou 2 vezes','Li 3 ou 4 vezes','Li quase todo dia'],
+  },
+  {
+    area: 0,
+    text: 'Quando você lê a Bíblia, costuma parar para pensar no que o texto significa para a sua vida hoje?',
+    opts: ['Raramente faço isso','Às vezes sim','Na maioria das vezes','Sempre faço isso'],
+  },
+  {
+    area: 0,
+    text: 'Você consegue explicar para um amigo o que acredita (sobre salvação, Deus, Jesus) com suas próprias palavras?',
+    opts: ['Não saberia explicar','Explicaria muito pouco','Explicaria o básico','Explicaria com clareza'],
+  },
+  {
+    area: 0,
+    text: 'Quando assiste a um filme, rola nas redes ou vê uma notícia, você pensa "o que a Bíblia diria sobre isso"?',
+    opts: ['Nunca penso nisso','Raramente','Às vezes','Com frequência'],
+  },
+
+  // Fé (4–7)
+  {
+    area: 1,
+    text: 'Quando você enfrenta algo difícil (provas, conflito, incerteza), seu primeiro instinto é orar?',
+    opts: ['Não, resolvo sozinho','Raro, só se piorar','Às vezes sim','Quase sempre'],
+  },
+  {
+    area: 1,
+    text: 'Você consegue lembrar de uma vez em que Deus respondeu uma oração sua nos últimos meses?',
+    opts: ['Não lembro de nenhuma','Talvez, mas não tenho certeza','Sim, uma ou duas vezes','Sim, tenho exemplos claros'],
+  },
+  {
+    area: 1,
+    text: 'Quando algo dá errado nos seus planos, como você costuma se sentir em relação a Deus?',
+    opts: ['Fico com raiva ou afastado','Questiono, mas volto depois','Busco entender o propósito','Confio mesmo sem entender'],
+  },
+  {
+    area: 1,
+    text: 'Você sente que a sua vida diária (escola, amigos, escolhas) é influenciada pela sua fé?',
+    opts: ['Quase nada','Um pouco','Bastante','Muito, em quase tudo'],
+  },
+
+  // Amor (8–11)
+  {
+    area: 2,
+    text: 'Quando alguém te magoa ou te irrita, quanto tempo você leva para perdoar de verdade?',
+    opts: ['Fico com raiva por muito tempo','Demoro bastante','Perdoo, mas leva um tempo','Busco perdoar logo'],
+  },
+  {
+    area: 2,
+    text: 'Você costuma ajudar alguém sem esperar nada em troca (família, amigo, desconhecido) na última semana?',
+    opts: ['Não me lembro de nenhuma vez','Uma vez ou outra','Algumas vezes','Faço isso com frequência'],
+  },
+  {
+    area: 2,
+    text: 'Você tem um amigo ou familiar que está passando por algo difícil e você tem cuidado ativamente disso?',
+    opts: ['Não tenho percebido','Percebi mas não fiz nada','Fiz algo pequeno','Estou presente de verdade'],
+  },
+  {
+    area: 2,
+    text: 'Quando você adora (ora, canta, lê), você sente genuinamente amor por Deus — ou é mais obrigação?',
+    opts: ['Parece mais obrigação','É misto, nem sempre sinto','Na maioria das vezes é real','Sinto amor de verdade'],
+  },
+
+  // Santidade (12–15)
+  {
+    area: 3,
+    text: 'Há algum hábito, conteúdo ou comportamento que você sabe que não agrada a Deus e ainda mantém?',
+    opts: ['Sim, vários e não luto contra','Sim, mas luto às vezes','Sim, e luto ativamente','Não tenho identificado nenhum assim'],
+  },
+  {
+    area: 3,
+    text: 'Quando você peca ou erra, o que costuma fazer?',
+    opts: ['Ignoro ou finjo que não aconteceu','Fico me culpando muito','Confesso mas demora','Confesso, me arrependo e sigo em frente'],
+  },
+  {
+    area: 3,
+    text: 'Nos últimos 30 dias, você percebeu alguma mudança real no seu comportamento por causa da sua fé?',
+    opts: ['Não percebi nada','Talvez algo pequeno','Sim, uma mudança clara','Sim, várias mudanças'],
+  },
+  {
+    area: 3,
+    text: 'Você consegue dizer não para algo que seus amigos querem fazer, quando vai contra sua fé?',
+    opts: ['Nunca consigo','Raramente consigo','Às vezes sim','Com certa frequência consigo'],
+  },
+];
+
+// Verses database per area × level (low/mid/high)
+const versesByArea = {
+  conhecimento: {
+    low: [
+      { text: 'Lâmpada para os meus pés é a tua palavra, e luz para o meu caminho.', ref: 'Salmos 119.105' },
+      { text: 'Toda a Escritura é inspirada por Deus e útil para o ensino, para a repreensão, para a correção e para a educação na justiça.', ref: '2 Timóteo 3.16' },
+    ],
+    mid: [
+      { text: 'Sede transformados pela renovação da vossa mente, para que possais discernir qual é a boa, agradável e perfeita vontade de Deus.', ref: 'Romanos 12.2' },
+      { text: 'Guarda estas minhas palavras no coração e na alma. Ata-as nas mãos como sinal, e sirvam de distintivo entre os olhos.', ref: 'Deuteronômio 11.18' },
+    ],
+    high: [
+      { text: 'Feliz o homem que não anda no conselho dos ímpios, mas tem prazer na Lei do Senhor, e nela medita dia e noite.', ref: 'Salmos 1.1–2' },
+    ],
+  },
+  fe: {
+    low: [
+      { text: 'Confia no Senhor de todo o teu coração e não te apoies no teu próprio entendimento.', ref: 'Provérbios 3.5' },
+      { text: 'O Senhor é o meu pastor; nada me faltará.', ref: 'Salmos 23.1' },
+    ],
+    mid: [
+      { text: 'Não andeis ansiosos por coisa alguma; antes, em tudo apresentai os vossos pedidos a Deus em oração e súplica com ações de graças.', ref: 'Filipenses 4.6' },
+      { text: 'Ora a fé é a certeza daquilo que esperamos e a prova das coisas que não vemos.', ref: 'Hebreus 11.1' },
+    ],
+    high: [
+      { text: 'Aquele que iniciou em vós a boa obra a completará até ao Dia de Cristo Jesus.', ref: 'Filipenses 1.6' },
+    ],
+  },
+  amor: {
+    low: [
+      { text: 'Amado, se Deus nos amou assim, devemos nós também amar uns aos outros.', ref: '1 João 4.11' },
+      { text: 'Nisto todos conhecerão que sois meus discípulos, se tiverdes amor uns aos outros.', ref: 'João 13.35' },
+    ],
+    mid: [
+      { text: 'O amor é paciente, o amor é benigno. Não se comporta com indecência, não procura os seus próprios interesses.', ref: '1 Coríntios 13.4–5' },
+      { text: 'Sede bondosos uns para com os outros, compassivos, perdoando-vos mutuamente, como Deus vos perdoou em Cristo.', ref: 'Efésios 4.32' },
+    ],
+    high: [
+      { text: 'E sobre todas essas coisas, revesti-vos do amor, que é o vínculo da perfeição.', ref: 'Colossenses 3.14' },
+    ],
+  },
+  santidade: {
+    low: [
+      { text: 'Sede santos, porque eu, o Senhor vosso Deus, sou santo.', ref: 'Levítico 19.2' },
+      { text: 'Fugi da imoralidade sexual. Todo pecado que o homem cometer é fora do corpo; mas quem fornica peca contra o próprio corpo.', ref: '1 Coríntios 6.18' },
+    ],
+    mid: [
+      { text: 'Apresentai os vossos corpos como sacrifício vivo, santo e agradável a Deus, que é o vosso culto espiritual.', ref: 'Romanos 12.1' },
+      { text: 'Se confessarmos os nossos pecados, ele é fiel e justo para nos perdoar os pecados e nos purificar de toda injustiça.', ref: '1 João 1.9' },
+    ],
+    high: [
+      { text: 'O fruto do Espírito é: amor, alegria, paz, paciência, amabilidade, bondade, fidelidade, mansidão, domínio próprio.', ref: 'Gálatas 5.22–23' },
+    ],
+  },
+};
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let current = 0;
+let answers = Array(questions.length).fill(null);
+let chart = null;
+
+// ══════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════
+function $(id) { return document.getElementById(id); }
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function startQuiz() {
+  current = 0;
+  answers = Array(questions.length).fill(null);
+  show('quiz');
+  renderQuestion();
+}
+
+function restart() { show('cover'); }
+
+// ── render question ──
+function renderQuestion() {
+  const q = questions[current];
+  const area = areas[q.area];
+  const total = questions.length;
+
+  // header
+  $('areaIcon').textContent = area.icon;
+  $('areaName').textContent = area.name;
+  $('areaSubtitle').textContent = area.subtitle;
+  $('qNumber').textContent = `Pergunta ${current + 1} de ${total}`;
+  $('qText').textContent = q.text;
+  $('progressBar').style.width = ((current / total) * 100) + '%';
+
+  // area dots
+  document.querySelectorAll('.area-dot').forEach(d => {
+    const i = parseInt(d.dataset.i);
+    d.classList.remove('active','done');
+    if (i < q.area) d.classList.add('done');
+    if (i === q.area) d.classList.add('active');
+  });
+
+  // options
+  const wrap = $('optionsWrap');
+  wrap.innerHTML = '';
+  q.opts.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.className = 'opt' + (answers[current] === idx ? ' selected' : '');
+    div.innerHTML = `<div class="opt-dot">${answers[current] === idx ? '✓' : ''}</div><span>${opt}</span>`;
+    div.onclick = () => selectOpt(idx);
+    wrap.appendChild(div);
+  });
+
+  $('btnBack').disabled = (current === 0);
+  $('btnNext').disabled = (answers[current] === null);
+  $('btnNext').textContent = current === total - 1 ? 'Ver Resultado ✦' : 'Próxima →';
+}
+
+function selectOpt(idx) {
+  answers[current] = idx;
+  document.querySelectorAll('.opt').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+    el.querySelector('.opt-dot').textContent = i === idx ? '✓' : '';
+  });
+  $('btnNext').disabled = false;
+}
+
+function goNext() {
+  if (answers[current] === null) return;
+  if (current < questions.length - 1) { current++; renderQuestion(); }
+  else showResult();
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ══════════════════════════════════════════════
+//  RESULT
+// ══════════════════════════════════════════════
+function showResult() {
+  show('result');
+
+  // compute scores per area (0–100)
+  const scores = areas.map((a, ai) => {
+    const qs = questions.filter(q => q.area === ai);
+    const total = qs.reduce((sum, q, ri) => {
+      const globalIdx = questions.findIndex(x => x === q);
+      return sum + (answers[globalIdx] ?? 0);
+    }, 0);
+    const max = qs.length * 3;
+    return Math.round((total / max) * 100);
+  });
+
+  // title
+  const avg = Math.round(scores.reduce((a,b)=>a+b,0) / 4);
+  let title = '';
+  if (avg >= 75) title = 'Crescendo com Consistência';
+  else if (avg >= 50) title = 'Em Caminho — Seguindo em Frente';
+  else if (avg >= 25) title = 'Início da Jornada';
+  else title = 'O Primeiro Passo';
+  $('resultTitle').textContent = title;
+
+  // radar chart
+  if (chart) chart.destroy();
+  const ctx = $('radarChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['📖 Conhecimento','🙏 Fé','❤️ Amor','✨ Santidade'],
+      datasets: [{
+        data: scores,
+        backgroundColor: 'rgba(201,168,76,0.15)',
+        borderColor: '#c9a84c',
+        borderWidth: 2.5,
+        pointBackgroundColor: ['#4a9eda','#9b72d0','#e0687a','#56c47e'],
+        pointBorderColor: '#0d1117',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+      }],
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 900, easing: 'easeOutQuart' },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { stepSize: 25, display: false },
+          grid: { color: 'rgba(255,255,255,0.07)' },
+          angleLines: { color: 'rgba(255,255,255,0.07)' },
+          pointLabels: { color: '#e6edf3', font: { size: 11, family: 'DM Sans' } },
+        },
+      },
+      plugins: { legend: { display: false } },
+    },
+  });
+
+  // score cards
+  const grid = $('scoreGrid');
+  grid.innerHTML = '';
+  areas.forEach((a, i) => {
+    const s = scores[i];
+    const div = document.createElement('div');
+    div.className = 'score-card';
+    div.innerHTML = `
+      <div class="sc-icon">${a.icon}</div>
+      <div class="sc-label">${a.name}</div>
+      <div class="sc-score" style="color:${a.color}">${s}<span style="font-size:14px;color:var(--muted)">%</span></div>
+      <div class="sc-bar-bg"><div class="sc-bar" style="width:0%;background:${a.color}" data-w="${s}"></div></div>
+    `;
+    grid.appendChild(div);
+  });
+  // animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.sc-bar').forEach(b => b.style.width = b.dataset.w + '%');
+  }, 100);
+
+  // message
+  const weakIdx = scores.indexOf(Math.min(...scores));
+  const weakArea = areas[weakIdx];
+  const strongIdx = scores.indexOf(Math.max(...scores));
+  const strongArea = areas[strongIdx];
+  $('msgCard').innerHTML = `<p>Seu ponto mais forte é <strong>${strongArea.icon} ${strongArea.name}</strong> — continue cultivando isso! 
+Sua maior oportunidade de crescimento está em <strong>${weakArea.icon} ${weakArea.name}</strong>. 
+A boa notícia? O crescimento cristão não é sobre perfeição, mas sobre direção. 
+<em>"Aquele que iniciou em vós a boa obra a completará."</em> (Fp 1.6)</p>`;
+
+  // verses
+  const wrap = $('versesWrap');
+  wrap.innerHTML = '';
+  areas.forEach((a, i) => {
+    const s = scores[i];
+    const level = s < 40 ? 'low' : s < 70 ? 'mid' : 'high';
+    const pool = versesByArea[a.id][level];
+    const v = pool[Math.floor(Math.random() * pool.length)];
+    const div = document.createElement('div');
+    div.className = 'verse-card';
+    div.innerHTML = `
+      <div class="verse-area-tag">${a.icon} ${a.name}</div>
+      <p class="verse-text">${v.text}</p>
+      <p class="verse-ref">${v.ref}</p>
+    `;
+    wrap.appendChild(div);
+  });
+}
+</script>
+</body>
+</html>
