@@ -55,6 +55,37 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ══ CHURCH HEADER ══ */
+  .church-header {
+    width: 100%;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(201,168,76,0.04);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .church-header-name {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .church-header-pg {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   /* ══ COVER ══ */
   #cover {
     min-height: 100vh;
@@ -62,7 +93,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 28px;
+    padding: 100px 28px 40px;
     text-align: center;
   }
   #cover.active { display: flex; }
@@ -135,7 +166,7 @@
 
   /* ══ QUIZ HEADER ══ */
   .quiz-header {
-    padding: 28px 24px 0;
+    padding: 80px 24px 0;
   }
   .area-label {
     display: flex; align-items: center; gap: 10px;
@@ -272,66 +303,215 @@
   .area-dot.active { background: transparent; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.2); }
 
   /* ══ RESULT ══ */
-  #result { padding: 28px 20px 60px; display: none; flex-direction: column; align-items: center; }
+  #result { padding: 80px 20px 60px; display: none; flex-direction: column; align-items: center; gap: 0; }
   #result.active { display: flex; }
 
+  .result-hero {
+    text-align: center;
+    margin-bottom: 28px;
+    width: 100%;
+  }
   .result-eyebrow {
     font-size: 11px; letter-spacing: 3px;
     text-transform: uppercase; color: var(--gold);
-    margin-bottom: 10px; text-align: center;
+    margin-bottom: 10px;
   }
   .result-title {
     font-family: 'Playfair Display', serif;
-    font-size: 26px; text-align: center;
+    font-size: 26px;
     line-height: 1.3; margin-bottom: 6px;
   }
-  .result-subtitle { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 28px; }
+  .result-subtitle { color: var(--muted); font-size: 13px; }
 
+  /* radar */
   .radar-wrap {
-    width: 100%; max-width: 340px;
+    width: 100%; max-width: 380px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 28px;
+    padding: 20px 24px 24px;
+    margin-bottom: 20px;
+  }
+  .radar-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .radar-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .avg-badge {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
   }
 
   /* score cards */
   .score-grid {
     width: 100%; display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px; margin-bottom: 28px;
+    gap: 10px; margin-bottom: 20px;
   }
   .score-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 18px;
-    padding: 18px 16px;
+    padding: 16px 14px;
+    transition: border-color .2s;
   }
-  .sc-icon { font-size: 20px; margin-bottom: 8px; }
-  .sc-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .score-card.is-weakest { border-color: rgba(224,104,122,0.4); }
+  .score-card.is-strongest { border-color: rgba(86,196,126,0.4); }
+  .sc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .sc-icon { font-size: 18px; }
+  .sc-tag {
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+    border-radius: 20px; padding: 2px 8px;
+  }
+  .sc-tag.strongest { background: rgba(86,196,126,0.15); color: #56c47e; }
+  .sc-tag.weakest { background: rgba(224,104,122,0.15); color: #e0687a; }
+  .sc-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .sc-subtitle-small { font-size: 10px; color: var(--muted); opacity: 0.6; margin-bottom: 8px; }
   .sc-score {
     font-family: 'Playfair Display', serif;
     font-size: 28px; line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .sc-bar-bg { background: var(--surface2); border-radius: 3px; height: 5px; }
   .sc-bar { height: 5px; border-radius: 3px; transition: width .8s ease .3s; }
 
-  /* verses section */
-  .verses-section { width: 100%; }
-  .verses-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px; margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
+  /* message card */
+  .msg-card {
+    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04));
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 28px;
+    width: 100%;
   }
+  .msg-card p { font-size: 14px; line-height: 1.7; color: var(--text); }
+  .msg-card strong { color: var(--gold-light); }
+
+  /* ── section headers ── */
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px;
+  }
+  .section-icon { font-size: 22px; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; line-height: 1.2;
+  }
+  .section-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── cycle section ── */
+  .cycle-section { width: 100%; margin-bottom: 32px; }
+  .cycle-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px 18px;
+  }
+  .cycle-flow {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 4px; margin-bottom: 16px; flex-wrap: nowrap;
+  }
+  .cycle-node {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 10px 4px;
+    position: relative;
+  }
+  .cycle-node::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; border-radius: 14px 14px 0 0;
+    background: var(--c);
+    opacity: 0.7;
+  }
+  .cn-icon { font-size: 16px; }
+  .cn-name { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text); text-align: center; }
+  .cn-key { font-size: 8px; color: var(--c); font-style: italic; text-align: center; }
+  .cycle-arrow { color: var(--muted); font-size: 14px; flex-shrink: 0; }
+  .cycle-desc { font-size: 13px; color: var(--muted); line-height: 1.6; text-align: center; font-style: italic; }
+
+  /* ── pillars deep dive ── */
+  .pillars-section { width: 100%; margin-bottom: 32px; }
+  .pillar-deep {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .pillar-deep-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .pillar-deep-header:active { background: rgba(255,255,255,0.02); }
+  .pdh-icon { font-size: 20px; }
+  .pdh-info { flex: 1; }
+  .pdh-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+  }
+  .pdh-sub { font-size: 11px; color: var(--muted); }
+  .pdh-score-wrap { display: flex; align-items: center; gap: 8px; }
+  .pdh-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+  }
+  .pdh-chevron { color: var(--muted); font-size: 12px; transition: transform .3s; }
+  .pillar-deep.open .pdh-chevron { transform: rotate(180deg); }
+
+  .pillar-deep-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height .4s ease, padding .3s ease;
+    padding: 0 18px;
+  }
+  .pillar-deep.open .pillar-deep-body {
+    max-height: 600px;
+    padding: 0 18px 18px;
+  }
+  .pdb-divider {
+    height: 1px; background: var(--border);
+    margin-bottom: 14px;
+  }
+  .pdb-greek {
+    display: inline-block;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px; color: var(--gold);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .pdb-text {
+    font-size: 13.5px; line-height: 1.75;
+    color: rgba(230,237,243,0.85);
+    margin-bottom: 12px;
+  }
+  .pdb-practical {
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--pillar-color, var(--gold));
+    border-radius: 0 10px 10px 0;
+    padding: 10px 14px;
+  }
+  .pdb-practical-label {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .pdb-practical p { font-size: 13px; line-height: 1.65; color: var(--text); }
+
+  /* ── verses ── */
+  .verses-section { width: 100%; margin-bottom: 32px; }
   .verse-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 18px;
     padding: 20px 18px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     position: relative;
     overflow: hidden;
   }
@@ -357,17 +537,57 @@
   }
   .verse-ref { font-size: 12px; color: var(--muted); font-weight: 500; }
 
-  /* message card */
-  .msg-card {
-    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04));
-    border: 1px solid rgba(201,168,76,0.3);
+  /* ── action plan ── */
+  .action-section { width: 100%; margin-bottom: 32px; }
+  .action-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 18px;
-    padding: 22px 20px;
-    margin-bottom: 28px;
-    width: 100%;
+    padding: 18px;
+    margin-bottom: 10px;
+    display: flex; gap: 14px;
+    align-items: flex-start;
   }
-  .msg-card p { font-size: 14px; line-height: 1.7; color: var(--text); }
-  .msg-card strong { color: var(--gold-light); }
+  .action-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .action-text { flex: 1; }
+  .action-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .action-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+
+  /* ── stott footer ── */
+  .stott-footer {
+    width: 100%; margin-bottom: 28px;
+  }
+  .stott-quote {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 22px;
+    text-align: center;
+    position: relative;
+  }
+  .sq-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 0.5;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .sq-text {
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .sq-author { font-size: 11px; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; }
 
   .btn-restart {
     background: transparent;
@@ -379,13 +599,17 @@
     padding: 13px 36px;
     cursor: pointer;
     transition: all .2s;
-    margin-top: 12px;
   }
   .btn-restart:hover { background: rgba(201,168,76,0.1); }
 </style>
 </head>
 <body>
 <div class="app">
+
+<div class="church-header">
+    <span class="church-header-name">Igreja Batista Central de Goiânia</span>
+    <span class="church-header-pg">PG de Adolescentes</span>
+  </div>
 
   <!-- ══ COVER ══ -->
   <div id="cover" class="screen active">
@@ -398,9 +622,9 @@
         </linearGradient>
       </defs>
     </svg>
-    <p class="cover-eyebrow">John Stott · 4 Pilares</p>
+    <p class="cover-eyebrow">4 Pilares do Crescimento Cristão</p>
     <h1 class="cover-title">Diagnóstico do Crescimento Cristão</h1>
-    <p class="cover-desc">Responda 16 perguntas práticas e descubra como está o seu crescimento nas quatro áreas essenciais da vida cristã.</p>
+    <p class="cover-desc">Responda 16 perguntas práticas e tenha um breve diagnóstico de como está o seu crescimento nas quatro áreas essenciais da vida cristã.</p>
     <button class="btn-start" onclick="startQuiz()">Começar →</button>
     <div class="pillars-row">
       <div class="pillar-badge"><span>📖</span> Conhecimento</div>
@@ -442,21 +666,112 @@
 
   <!-- ══ RESULT ══ -->
   <div id="result" class="screen">
-    <p class="result-eyebrow">Seu Diagnóstico</p>
-    <h2 class="result-title" id="resultTitle"></h2>
-    <p class="result-subtitle">Baseado nas suas respostas</p>
 
+    <!-- Hero -->
+    <div class="result-hero">
+      <p class="result-eyebrow">Seu Diagnóstico · John Stott</p>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <p class="result-subtitle" id="resultSubtitle">Baseado nas suas respostas</p>
+    </div>
+
+    <!-- Radar -->
     <div class="radar-wrap">
+      <div class="radar-header">
+        <span class="radar-label">Visão Geral dos 4 Pilares</span>
+        <span class="avg-badge" id="avgBadge"></span>
+      </div>
       <canvas id="radarChart"></canvas>
     </div>
 
+    <!-- Score cards -->
     <div class="score-grid" id="scoreGrid"></div>
 
+    <!-- Personal message -->
     <div class="msg-card" id="msgCard"></div>
 
-    <div class="verses-section">
-      <h3 class="verses-title">📜 Palavras para o seu Caminho</h3>
+    <!-- Interdependence cycle -->
+    <div class="cycle-section" id="cycleSection">
+      <div class="section-header">
+        <span class="section-icon">🔄</span>
+        <div>
+          <h3 class="section-title">O Ciclo Vivo da Fé</h3>
+          <p class="section-sub">Como os 4 pilares se alimentam</p>
+        </div>
+      </div>
+      <div class="cycle-card">
+        <div class="cycle-flow">
+          <div class="cycle-node" style="--c:#4a9eda">
+            <span class="cn-icon">📖</span>
+            <span class="cn-name">Conhecimento</span>
+            <span class="cn-key">epignosis</span>
+          </div>
+          <div class="cycle-arrow">→</div>
+          <div class="cycle-node" style="--c:#9b72d0">
+            <span class="cn-icon">🙏</span>
+            <span class="cn-name">Fé</span>
+            <span class="cn-key">pistis</span>
+          </div>
+          <div class="cycle-arrow">→</div>
+          <div class="cycle-node" style="--c:#e0687a">
+            <span class="cn-icon">❤️</span>
+            <span class="cn-name">Amor</span>
+            <span class="cn-key">agapē</span>
+          </div>
+          <div class="cycle-arrow">→</div>
+          <div class="cycle-node" style="--c:#56c47e">
+            <span class="cn-icon">✨</span>
+            <span class="cn-name">Santidade</span>
+            <span class="cn-key">hagiasmos</span>
+          </div>
+        </div>
+        <p class="cycle-desc">
+          Conhecer a Deus fortalece a fé. A fé opera pelo amor. O amor a Deus e ao próximo <em>é</em> a santidade em ação.
+        </p>
+      </div>
+    </div>
+
+    <!-- Deep dive per pillar -->
+    <div class="pillars-section" id="pillarsSection">
+      <div class="section-header">
+        <span class="section-icon">📚</span>
+        <div>
+          <h3 class="section-title">Aprofundamento por Pilar</h3>
+          <p class="section-sub">O que Stott ensina sobre cada área</p>
+        </div>
+      </div>
+      <div id="pillarsDeep"></div>
+    </div>
+
+    <!-- Verses -->
+    <div class="verses-section" id="versesSection">
+      <div class="section-header">
+        <span class="section-icon">📜</span>
+        <div>
+          <h3 class="section-title">Palavras para o seu Caminho</h3>
+          <p class="section-sub">Escrituras personalizadas ao seu resultado</p>
+        </div>
+      </div>
       <div id="versesWrap"></div>
+    </div>
+
+    <!-- Action plan -->
+    <div class="action-section" id="actionSection">
+      <div class="section-header">
+        <span class="section-icon">🎯</span>
+        <div>
+          <h3 class="section-title">Plano de Ação</h3>
+          <p class="section-sub">Próximos passos práticos para esta semana</p>
+        </div>
+      </div>
+      <div id="actionWrap"></div>
+    </div>
+
+    <!-- Stott quote footer -->
+    <div class="stott-footer">
+      <div class="stott-quote">
+        <span class="sq-mark">"</span>
+        <p class="sq-text">O novo nascimento é apenas a linha de partida. A vida cristã autêntica exige um desenvolvimento intencional e contínuo.</p>
+      </div>
     </div>
 
     <button class="btn-restart" onclick="restart()">↺ Refazer o Diagnóstico</button>
@@ -649,12 +964,27 @@ const versesByArea = {
 //  STATE
 // ══════════════════════════════════════════════
 let current = 0;
-let answers = Array(questions.length).fill(null);
+let answers = Array(questions.length).fill(null);   // stores the SCORE VALUE (0-3), not display index
+let shuffledOrders = [];  // per question: array of original indices in display order
 let chart = null;
 
 // ══════════════════════════════════════════════
-//  HELPERS
+//  SHUFFLE HELPER
 // ══════════════════════════════════════════════
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Pre-generate a shuffled display order for every question once per quiz start
+function buildShuffledOrders() {
+  shuffledOrders = questions.map(() => shuffleArray([0, 1, 2, 3]));
+}
+
 function $(id) { return document.getElementById(id); }
 
 function show(id) {
@@ -665,6 +995,7 @@ function show(id) {
 function startQuiz() {
   current = 0;
   answers = Array(questions.length).fill(null);
+  buildShuffledOrders();
   show('quiz');
   renderQuestion();
 }
@@ -677,7 +1008,6 @@ function renderQuestion() {
   const area = areas[q.area];
   const total = questions.length;
 
-  // header
   $('areaIcon').textContent = area.icon;
   $('areaName').textContent = area.name;
   $('areaSubtitle').textContent = area.subtitle;
@@ -685,7 +1015,6 @@ function renderQuestion() {
   $('qText').textContent = q.text;
   $('progressBar').style.width = ((current / total) * 100) + '%';
 
-  // area dots
   document.querySelectorAll('.area-dot').forEach(d => {
     const i = parseInt(d.dataset.i);
     d.classList.remove('active','done');
@@ -693,14 +1022,16 @@ function renderQuestion() {
     if (i === q.area) d.classList.add('active');
   });
 
-  // options
+  // Build shuffled options — each display slot maps to a score value
+  const order = shuffledOrders[current]; // e.g. [2,0,3,1] means display[0]=score2, display[1]=score0 …
   const wrap = $('optionsWrap');
   wrap.innerHTML = '';
-  q.opts.forEach((opt, idx) => {
+  order.forEach((scoreValue, displayIdx) => {
     const div = document.createElement('div');
-    div.className = 'opt' + (answers[current] === idx ? ' selected' : '');
-    div.innerHTML = `<div class="opt-dot">${answers[current] === idx ? '✓' : ''}</div><span>${opt}</span>`;
-    div.onclick = () => selectOpt(idx);
+    const isSelected = answers[current] === scoreValue;
+    div.className = 'opt' + (isSelected ? ' selected' : '');
+    div.innerHTML = `<div class="opt-dot">${isSelected ? '✓' : ''}</div><span>${q.opts[scoreValue]}</span>`;
+    div.onclick = () => selectOpt(scoreValue);
     wrap.appendChild(div);
   });
 
@@ -709,11 +1040,16 @@ function renderQuestion() {
   $('btnNext').textContent = current === total - 1 ? 'Ver Resultado ✦' : 'Próxima →';
 }
 
-function selectOpt(idx) {
-  answers[current] = idx;
-  document.querySelectorAll('.opt').forEach((el, i) => {
-    el.classList.toggle('selected', i === idx);
-    el.querySelector('.opt-dot').textContent = i === idx ? '✓' : '';
+function selectOpt(scoreValue) {
+  answers[current] = scoreValue;
+  // Re-render options to update selection state
+  const q = questions[current];
+  const order = shuffledOrders[current];
+  document.querySelectorAll('.opt').forEach((el, displayIdx) => {
+    const sv = order[displayIdx];
+    const sel = sv === scoreValue;
+    el.classList.toggle('selected', sel);
+    el.querySelector('.opt-dot').textContent = sel ? '✓' : '';
   });
   $('btnNext').disabled = false;
 }
@@ -731,30 +1067,104 @@ function goBack() {
 // ══════════════════════════════════════════════
 //  RESULT
 // ══════════════════════════════════════════════
+//  PILLAR DEEP-DIVE DATA
+// ══════════════════════════════════════════════
+const pillarInfo = [
+  {
+    greek: 'epignosis — conhecimento transformador',
+    text: 'Uma crítica importante ao anti-intelectualismo cristão é que Deus se revela por palavras (a Escritura) e pela Palavra encarnada (Cristo) — o que nos exige usar a mente. Não se trata de acúmulo de informação teológica, mas de um conhecimento que transforma o caráter.',
+    practical: 'O crescimento aqui se dá pela leitura atenta, estudo hermenêutico e meditação na Bíblia. É aprender a pensar sobre filmes, cultura, escola e relacionamentos com lentes bíblicas — desenvolver uma cosmovisão cristã robusta.',
+  },
+  {
+    greek: 'pistis — fidelidade e confiança absoluta',
+    text: 'A fé cristã não é o ato inicial de crer para salvação. É a confiança contínua no caráter e nas promessas de Deus diante das intempéries da vida. Quanto mais conhecemos a Deus, mais a fé encontra alicerce sólido. A fé cristã não é um salto no escuro, mas um passo na luz da revelação.',
+    practical: 'Desenvolver a fé significa aprender a depender de Deus em momentos de crise, ansiedade ou escassez. É o exercício de entregar o controle e descansar na providência divina, transformando crença teórica em confiança prática no dia a dia.',
+  },
+  {
+    greek: 'agapē — amor de vontade e sacrifício',
+    text: 'O conhecimento sem amor ensoberbece (1 Co 8.1). O amor cristão é fundamentalmente diferente do amor romântico: é uma decisão ativa de buscar o bem do outro, independente dos méritos de quem o recebe. Para Stott, o amor é a suprema virtude cristã e a maior evidência de que alguém pertence a Cristo.',
+    practical: 'O crescimento no amor tem duas direções: vertical (adoração e obediência a Deus) e horizontal (serviço ao próximo). Isso se traduz em perdão, paciência, generosidade e envolvimento real na vida da comunidade.',
+  },
+  {
+    greek: 'hagiasmos — separação moral, não física',
+    text: 'Santo (hagios) significa "separado". Não é isolamento físico do mundo, mas separação moral e espiritual: estar no mundo sem pertencer a ele. O objetivo final do crescimento cristão é a conformidade com a imagem de Jesus — a santidade é o reflexo moral de Deus na vida do crente.',
+    practical: 'Envolve a mortificação diária do pecado (lutar contra hábitos e desejos egoístas) e a vivificação do Espírito (cultivar o Fruto do Espírito: mansidão, domínio próprio, paz). É um processo contínuo de arrependimento e transformação.',
+  },
+];
+
+const actionsByArea = {
+  conhecimento: [
+    { title: 'Leia 1 capítulo por dia', desc: 'Escolha um livro do NT e leia um capítulo por dia esta semana. Anote uma coisa que te chamou atenção.' },
+    { title: 'Filtre a cultura pela Bíblia', desc: 'No próximo filme ou série, pause e pergunte: o que a Bíblia diria sobre o que estou vendo aqui?' },
+    { title: 'Explique para alguém', desc: 'Tente contar o Evangelho para um amigo com suas próprias palavras. O que você consegue e não consegue explicar?' },
+  ],
+  fe: [
+    { title: 'Ore antes de agir', desc: 'Esta semana, quando surgir um problema, ore primeiro — antes de buscar a solução sozinho.' },
+    { title: 'Registre respostas de oração', desc: 'Anote num caderno ou no celular quando Deus responder uma oração. Releia quando a fé balançar.' },
+    { title: 'Entregue uma preocupação', desc: 'Identifique algo que te preocupa e escreva numa folha. Ore entregando à providência de Deus.' },
+  ],
+  amor: [
+    { title: 'Perdoe ativamente', desc: 'Há alguém que te magoou? Ore pelo nome dessa pessoa todos os dias esta semana.' },
+    { title: 'Uma ação de serviço', desc: 'Faça algo prático por alguém (família, amigo, colega) sem esperar reconhecimento.' },
+    { title: 'Adoração de coração', desc: 'Reserve 10 minutos para adorar a Deus — sem distração. Só você, música e oração.' },
+  ],
+  santidade: [
+    { title: 'Identifique um hábito', desc: 'Qual conteúdo ou comportamento você sabe que não agrada a Deus? Nomeie e traga à oração.' },
+    { title: 'Pratique o arrependimento', desc: 'Quando pecar, não fique na culpa — confesse, receba o perdão (1Jo 1.9) e siga em frente.' },
+    { title: 'Cultive o Fruto do Espírito', desc: 'Escolha uma característica do Fruto (Gl 5.22) e foque nela intencionalmente esta semana.' },
+  ],
+};
+
+// ══════════════════════════════════════════════
 function showResult() {
   show('result');
 
-  // compute scores per area (0–100)
   const scores = areas.map((a, ai) => {
-    const qs = questions.filter(q => q.area === ai);
-    const total = qs.reduce((sum, q, ri) => {
-      const globalIdx = questions.findIndex(x => x === q);
-      return sum + (answers[globalIdx] ?? 0);
-    }, 0);
-    const max = qs.length * 3;
+    const areaQs = questions.reduce((acc, q, qi) => {
+      if (q.area === ai) acc.push(qi);
+      return acc;
+    }, []);
+    const total = areaQs.reduce((sum, qi) => sum + (answers[qi] ?? 0), 0);
+    const max = areaQs.length * 3;
     return Math.round((total / max) * 100);
   });
 
-  // title
   const avg = Math.round(scores.reduce((a,b)=>a+b,0) / 4);
-  let title = '';
-  if (avg >= 75) title = 'Crescendo com Consistência';
-  else if (avg >= 50) title = 'Em Caminho — Seguindo em Frente';
-  else if (avg >= 25) title = 'Início da Jornada';
-  else title = 'O Primeiro Passo';
-  $('resultTitle').textContent = title;
+  const allZero  = scores.every(s => s === 0);
+  const allHundo = scores.every(s => s === 100);
+  const allHigh  = scores.every(s => s >= 75);
 
-  // radar chart
+  // ── Tie-aware weak/strong detection ──
+  const minScore = Math.min(...scores);
+  const maxScore = Math.max(...scores);
+  const weakIdxs   = scores.map((s,i) => s === minScore ? i : -1).filter(i => i >= 0);
+  const strongIdxs = scores.map((s,i) => s === maxScore ? i : -1).filter(i => i >= 0);
+  const weakIdx   = weakIdxs[0];
+  const strongIdx = strongIdxs[0];
+  const hasTiedWeak   = weakIdxs.length > 1;
+  const hasTiedStrong = strongIdxs.length > 1;
+
+  // Helper: format a list of area names naturally ("X e Y" or "X, Y e Z")
+  function areaList(idxs) {
+    const names = idxs.map(i => `<strong>${areas[i].icon} ${areas[i].name}</strong>`);
+    if (names.length === 1) return names[0];
+    return names.slice(0, -1).join(', ') + ' e ' + names[names.length - 1];
+  }
+
+  // ── Title & subtitle ──
+  let title = '', subtitle = '';
+  if (allZero)       { title = 'Hm… Isso foi honesto! 👀'; subtitle = 'Honestidade é sempre um bom começo.'; }
+  else if (allHundo) { title = 'Perfeito em Tudo? 🤔'; subtitle = 'Os maiores santos foram os que mais reconheciam suas falhas.'; }
+  else if (avg >= 75){ title = 'Crescendo com Consistência'; subtitle = `Média geral: ${avg}% — vida cristã intencional.`; }
+  else if (avg >= 50){ title = 'Em Caminho'; subtitle = `Média geral: ${avg}% — seguindo em frente.`; }
+  else if (avg >= 25){ title = 'Início da Jornada'; subtitle = `Média geral: ${avg}% — todo grande caminho começa assim.`; }
+  else               { title = 'O Primeiro Passo'; subtitle = `Média geral: ${avg}% — a linha de partida tem valor.`; }
+
+  $('resultTitle').textContent = title;
+  $('resultSubtitle').textContent = subtitle;
+  $('avgBadge').textContent = `${avg}%`;
+
+  // ── Radar chart ──
   if (chart) chart.destroy();
   const ctx = $('radarChart').getContext('2d');
   chart = new Chart(ctx, {
@@ -788,53 +1198,179 @@ function showResult() {
     },
   });
 
-  // score cards
+  // ── Score cards (enhanced, tie-aware) ──
   const grid = $('scoreGrid');
   grid.innerHTML = '';
   areas.forEach((a, i) => {
     const s = scores[i];
+    const isWeak   = weakIdxs.includes(i)   && !allZero && !allHundo;
+    const isStrong = strongIdxs.includes(i) && !allZero && !allHundo;
     const div = document.createElement('div');
-    div.className = 'score-card';
+    div.className = 'score-card' + (isWeak ? ' is-weakest' : '') + (isStrong ? ' is-strongest' : '');
     div.innerHTML = `
-      <div class="sc-icon">${a.icon}</div>
+      <div class="sc-top">
+        <span class="sc-icon">${a.icon}</span>
+        ${isStrong ? `<span class="sc-tag strongest">${hasTiedStrong ? 'empate' : '+ forte'}</span>` : ''}
+        ${isWeak   ? `<span class="sc-tag weakest">${hasTiedWeak ? 'empate' : 'crescer'}</span>` : ''}
+      </div>
       <div class="sc-label">${a.name}</div>
+      <div class="sc-subtitle-small">${a.subtitle}</div>
       <div class="sc-score" style="color:${a.color}">${s}<span style="font-size:14px;color:var(--muted)">%</span></div>
       <div class="sc-bar-bg"><div class="sc-bar" style="width:0%;background:${a.color}" data-w="${s}"></div></div>
     `;
     grid.appendChild(div);
   });
-  // animate bars
   setTimeout(() => {
     document.querySelectorAll('.sc-bar').forEach(b => b.style.width = b.dataset.w + '%');
   }, 100);
 
-  // message
-  const weakIdx = scores.indexOf(Math.min(...scores));
-  const weakArea = areas[weakIdx];
-  const strongIdx = scores.indexOf(Math.max(...scores));
-  const strongArea = areas[strongIdx];
-  $('msgCard').innerHTML = `<p>Seu ponto mais forte é <strong>${strongArea.icon} ${strongArea.name}</strong> — continue cultivando isso! 
-Sua maior oportunidade de crescimento está em <strong>${weakArea.icon} ${weakArea.name}</strong>. 
-A boa notícia? O crescimento cristão não é sobre perfeição, mas sobre direção. 
-<em>"Aquele que iniciou em vós a boa obra a completará."</em> (Fp 1.6)</p>`;
+  // ── Personal message ──
+  const msgCard = $('msgCard');
+  if (allZero) {
+    msgCard.innerHTML = `
+      <p style="margin-bottom:12px"><strong>Uau. Zero em tudo.</strong> Pode ser que você foi bem honesto — e isso tem valor! Mas pode ser também que você ainda não conhece Jesus de verdade, e tudo bem estar aqui para descobrir isso.</p>
+      <p style="margin-bottom:12px">A mensagem do Evangelho é simples: <strong>todos nós erramos</strong> e nos afastamos de Deus — mas Deus não ficou distante. Ele enviou Jesus para morrer no nosso lugar e ressuscitou, para que qualquer pessoa que confie Nele tenha uma vida nova.</p>
+      <p style="margin-bottom:12px; font-style:italic; color:var(--gold-light)">"Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna." — João 3.16</p>
+      <p>Se você quiser dar esse primeiro passo, <strong>fale com o líder desta reunião.</strong> Ele vai adorar conversar com você. 🙌</p>`;
+  } else if (allHundo) {
+    msgCard.innerHTML = `
+      <p style="margin-bottom:12px"><strong>100% em tudo. Absolutamente perfeito.</strong> 🏆</p>
+      <p style="margin-bottom:12px">Só para contextualizar: a última pessoa que foi perfeita caminhou sobre as águas e ressuscitou mortos. Ele se chama Jesus. Você não é Jesus. (Se for, por favor, nos avise — temos muitas perguntas.)</p>
+      <p style="margin-bottom:12px">Honestidade é uma virtude cristã também! Os maiores santos da história foram os que mais reconheciam suas próprias falhas.</p>
+      <p style="font-style:italic; color:var(--gold-light)">"Assim, aquele que pensa estar em pé, cuide para que não caia." — 1 Coríntios 10.12</p>`;
+  } else if (allHigh) {
+    msgCard.innerHTML = `
+      <p style="margin-bottom:12px">Seus resultados mostram uma <strong>vida cristã consistente e intencional</strong> — isso é fruto muito da Graça de Deus e um coração disponível. Parabéns de verdade!</p>
+      <p style="margin-bottom:12px; font-style:italic; color:var(--gold-light)">"Assim, aquele que pensa estar em pé, cuide para que não caia." — 1 Coríntios 10.12</p>
+      <p>Justamente porque você está indo bem, guarde essa palavra no coração. ${hasTiedWeak ? `As áreas com mais espaço para crescer são ${areaList(weakIdxs)}.` : `A área com mais espaço para crescer é ${areaList(weakIdxs)}.`} Continue dependendo de Deus.</p>`;
+  } else {
+    const strongLabel = hasTiedStrong
+      ? `Seus pontos mais fortes são ${areaList(strongIdxs)}`
+      : `Seu ponto mais forte é ${areaList(strongIdxs)}`;
+    const weakLabel = hasTiedWeak
+      ? `suas maiores oportunidades de crescimento estão em ${areaList(weakIdxs)}`
+      : `sua maior oportunidade de crescimento está em ${areaList(weakIdxs)}`;
+    msgCard.innerHTML = `
+      <p style="margin-bottom:12px">${strongLabel} — continue cultivando isso! E ${weakLabel}.</p>
+      <p style="font-style:italic; color:var(--gold-light)">"Aquele que iniciou em vós a boa obra a completará até ao Dia de Cristo Jesus." — Filipenses 1.6</p>`;
+  }
 
-  // verses
+  // ── Pillar deep-dives (accordion) ──
+  const pillarsDeep = $('pillarsDeep');
+  pillarsDeep.innerHTML = '';
+  areas.forEach((a, i) => {
+    const info = pillarInfo[i];
+    const s = scores[i];
+    const div = document.createElement('div');
+    div.className = 'pillar-deep';
+    div.innerHTML = `
+      <div class="pillar-deep-header" onclick="togglePillar(this)">
+        <span class="pdh-icon">${a.icon}</span>
+        <div class="pdh-info">
+          <div class="pdh-name">${a.name}</div>
+          <div class="pdh-sub">${a.subtitle}</div>
+        </div>
+        <div class="pdh-score-wrap">
+          <span class="pdh-score" style="color:${a.color}">${s}%</span>
+          <span class="pdh-chevron">▼</span>
+        </div>
+      </div>
+      <div class="pillar-deep-body">
+        <div class="pdb-divider"></div>
+        <span class="pdb-greek">${info.greek}</span>
+        <p class="pdb-text">${info.text}</p>
+        <div class="pdb-practical" style="--pillar-color:${a.color}">
+          <div class="pdb-practical-label">Aplicação prática</div>
+          <p>${info.practical}</p>
+        </div>
+      </div>
+    `;
+    pillarsDeep.appendChild(div);
+  });
+  // Auto-open weakest area(s)
+  if (!allZero && !allHundo) {
+    const cards = pillarsDeep.querySelectorAll('.pillar-deep');
+    weakIdxs.forEach(i => cards[i].classList.add('open'));
+  }
+
+  // ── Verses ──
+  const versesSection = $('versesSection');
   const wrap = $('versesWrap');
   wrap.innerHTML = '';
-  areas.forEach((a, i) => {
-    const s = scores[i];
-    const level = s < 40 ? 'low' : s < 70 ? 'mid' : 'high';
-    const pool = versesByArea[a.id][level];
-    const v = pool[Math.floor(Math.random() * pool.length)];
-    const div = document.createElement('div');
-    div.className = 'verse-card';
-    div.innerHTML = `
-      <div class="verse-area-tag">${a.icon} ${a.name}</div>
-      <p class="verse-text">${v.text}</p>
-      <p class="verse-ref">${v.ref}</p>
-    `;
-    wrap.appendChild(div);
-  });
+  if (allZero || allHundo) {
+    versesSection.style.display = 'none';
+  } else {
+    versesSection.style.display = '';
+    areas.forEach((a, i) => {
+      const s = scores[i];
+      const level = s < 40 ? 'low' : s < 70 ? 'mid' : 'high';
+      const pool = versesByArea[a.id][level];
+      const v = pool[Math.floor(Math.random() * pool.length)];
+      const div = document.createElement('div');
+      div.className = 'verse-card';
+      div.innerHTML = `
+        <div class="verse-area-tag">${a.icon} ${a.name}</div>
+        <p class="verse-text">${v.text}</p>
+        <p class="verse-ref">${v.ref}</p>
+      `;
+      wrap.appendChild(div);
+    });
+  }
+
+  // ── Action plan ──
+  const actionSection = $('actionSection');
+  const actionWrap = $('actionWrap');
+  actionWrap.innerHTML = '';
+  if (allZero || allHundo) {
+    actionSection.style.display = 'none';
+  } else {
+    actionSection.style.display = '';
+    // If there's a tie in weakest, show 1 action per tied area + 1 for runner-up (or just tied areas if ≥3)
+    // Otherwise: 2 actions for weakest + 1 for runner-up
+    let actionEntries = [];
+    if (hasTiedWeak) {
+      // One action per weak area
+      weakIdxs.forEach(i => {
+        const act = actionsByArea[areas[i].id][0];
+        actionEntries.push({ act, color: areas[i].color });
+      });
+      // If only 2 tied weak areas, add 1 runner-up
+      if (weakIdxs.length === 2) {
+        const runnerUpIdx = scores
+          .map((s,i) => ({s,i}))
+          .filter(x => !weakIdxs.includes(x.i))
+          .sort((a,b) => a.s - b.s)[0].i;
+        actionEntries.push({ act: actionsByArea[areas[runnerUpIdx].id][0], color: areas[runnerUpIdx].color });
+      }
+    } else {
+      const runnerUpIdx = scores
+        .map((s,i) => ({s,i}))
+        .filter(x => x.i !== weakIdx)
+        .sort((a,b) => a.s - b.s)[0].i;
+      actionsByArea[areas[weakIdx].id].slice(0, 2).forEach(act =>
+        actionEntries.push({ act, color: areas[weakIdx].color })
+      );
+      actionEntries.push({ act: actionsByArea[areas[runnerUpIdx].id][0], color: areas[runnerUpIdx].color });
+    }
+
+    actionEntries.forEach(({ act, color }, idx) => {
+      const div = document.createElement('div');
+      div.className = 'action-card';
+      div.innerHTML = `
+        <div class="action-num" style="background:${color}22;color:${color}">${idx + 1}</div>
+        <div class="action-text">
+          <div class="action-title">${act.title}</div>
+          <div class="action-desc">${act.desc}</div>
+        </div>
+      `;
+      actionWrap.appendChild(div);
+    });
+  }
+}
+
+function togglePillar(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
 }
 </script>
 </body>
